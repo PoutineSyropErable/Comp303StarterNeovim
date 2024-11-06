@@ -13,4 +13,22 @@ public class Song
 	private int aBpm;
 	@SuppressWarnings("unused")
 	private Genre aGenre;
+
+	public Song()
+	{
+
+		aName = "Thunderstruck";
+		aFormat = AudioFormat.MP3;
+		aBpm = 1000;
+		aGenre = Genre.ROCK;
+
+	}
+
+	public static void main(String[] args)
+	{
+
+		Song mySong = new Song();
+		System.out.println(mySong);
+
+	}
 }

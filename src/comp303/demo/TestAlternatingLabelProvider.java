@@ -12,9 +12,9 @@ public class TestAlternatingLabelProvider
 {
 	private static final String LABEL_1 = "AAA";
 	private static final String LABEL_2 = "BBB";
-	
+
 	private AlternatingLabelProvider aFixture;
-	
+
 	/**
 	 * Initializes the test fixture.
 	 */
@@ -23,7 +23,7 @@ public class TestAlternatingLabelProvider
 	{
 		aFixture = new AlternatingLabelProvider(LABEL_1, LABEL_2);
 	}
-	
+
 	/**
 	 * Tests the entire class.
 	 */

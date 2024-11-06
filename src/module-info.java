@@ -8,4 +8,5 @@ module demo
 	requires transitive javafx.controls;
 	requires transitive javafx.graphics;
 	requires static junit;
+
 }
