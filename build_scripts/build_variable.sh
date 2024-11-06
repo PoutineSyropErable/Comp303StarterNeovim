@@ -1,4 +1,5 @@
 #!/bin/bash
+printf "\n"
 
 # Set JAVA_HOME and add Java to PATH
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
@@ -15,10 +16,27 @@ $JUNIT5_PATH/junit-jupiter-engine-5.11.3.jar:\
 $JUNIT5_PATH/junit-jupiter-params-5.11.3.jar:\
 $JUNIT4_PATH/junit-4.13.2.jar"
 
+#--------------------------------------------GO TO CORRECT DIRECTORY---------------------------
+SCRIPT_PATH=$(realpath "$0")
+SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
+# SCRIPT_DIR=$(realpath $SCRIPT_DIR)
+printf "script path: $SCRIPT_PATH\n"
+printf "script dir: $SCRIPT_DIR\n"
+
+cd "$SCRIPT_DIR" || {
+	echo "Can't CD to Script Dir"
+	exit 66
+}
+
+printf "Currently in $(pwd)\n"
+
 # If executed the one in ./build_script, it cd back to the project root
 if [[ ! -d "src" ]]; then
+	echo "cd-ing backward"
 	cd ..
+	printf "Currently in $(pwd)\n"
 fi
+printf "\n"
 
 #--------------------------------------GETTING THE FILE----------------------------------------------
 
@@ -29,10 +47,8 @@ DEFAULT_MODULE_TO_EXECUTE="demo.Welcome"
 if [[ -n "$1" ]]; then
 	# Extract directory and filename components
 	ABSOLUTE_PATH=$(realpath "$1")
-	SCRIPT_PATH=$(realpath "$0")
-	printf "\ninput path: $1\n"
+	printf "input path: $1\n"
 	echo "Absolute path: $ABSOLUTE_PATH"
-	printf "script path: $SCRIPT_PATH\n\n"
 
 	DIRNAME_PATH=$(dirname "$ABSOLUTE_PATH") # Remove "src/" prefix
 	DIRNAME=$(basename "$DIRNAME_PATH")
@@ -56,8 +72,30 @@ fi
 OUTPUT_DIR="out" # The output directory for compiled files
 SRC_DIR="src"    # The source directory
 MODULE_NAME="demo"
-ALL_JAVA_FILES=$(find "$SRC_DIR" -name "*.java")      # All .java files in the source directory
-MAIN_MODULE="$MODULE_NAME/comp303.$MODULE_TO_EXECUTE" # Main module to run
+ALL_JAVA_FILES=$(find "$SRC_DIR" -name "*.java")       # All .java files in the source directory
+ALL_OUTPUT_FILES=$(find "$OUTPUT_DIR" -name "*.class") # All .java files in the source directory
+MAIN_MODULE="$MODULE_NAME/comp303.$MODULE_TO_EXECUTE"  # Main module to run
+
+removeOutputFiles() {
+	echo "Removing specific output files in $OUTPUT_DIR..."
+	echo "Here is the list of files to remove"
+	echo "$ALL_OUTPUT_FILES"
+
+	# Ensure $OUTPUT_DIR exists to avoid errors
+	if [[ -d "$OUTPUT_DIR" ]]; then
+		# Specify patterns for files to delete
+		find "$OUTPUT_DIR" -type f -name "*.class" -exec rm {} +
+		find "$OUTPUT_DIR" -type f -name "*.jar" -exec rm {} +
+		# Add additional file patterns as needed
+	else
+		echo "Output directory $OUTPUT_DIR does not exist."
+	fi
+
+	echo "Cleanup complete."
+}
+
+#You can comment this line, it's not needed
+removeOutputFiles
 
 # Recompile all Java files (Overkill, but let's not recreate a makefile from scratch for java)
 javac --module-path "$PATH_TO_FX:$JUNIT4_PATH" \
