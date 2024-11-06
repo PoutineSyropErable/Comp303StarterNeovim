@@ -16,6 +16,10 @@ Already 1am
 #First: Download Junit4
 ## You can use wget or just copy paste in your browser/whatever
 wget https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
+#Download hamcrest
+wget https://repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
+
+
 
 #Then Junit5 (We dont need it, but hey...)
 wget https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.11.3/junit-jupiter-api-5.11.3.jar
@@ -41,6 +45,8 @@ sudo mkdir /usr/lib/jvm/junit5
 
 sudo mv javafx-sdk-17.0.13 /usr/lib/jvm
 sudo mv junit-4.13.2.jar /usr/lib/jvm/junit4
+sudo mv hamcrest-core-1.3.jar /usr/lib/jvm/junit4/
+
 
 sudo mv junit-jupiter-api-5.11.3.jar /usr/lib/jvm/junit5
 sudo mv junit-jupiter-engine-5.11.3.jar /usr/lib/jvm/junit5

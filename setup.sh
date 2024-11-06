@@ -10,6 +10,7 @@ JVM_DIR="/usr/lib/jvm"
 JAVAFX_ZIP_PATH="$DOWNLOAD_DIR/openjfx-17.0.13_linux-x64_bin-sdk.zip"
 JAVAFX_DIR="$JVM_DIR/javafx-sdk-17.0.13"
 JUNIT4_PATH="$JVM_DIR/junit4/junit-4.13.2.jar"
+HAMCREST_PATH="$JUNIT4_DIR/hamcrest-core-1.3.jar"
 JUNIT5_DIR="$JVM_DIR/junit5"
 JUNIT5_API_PATH="$JUNIT5_DIR/junit-jupiter-api-5.11.3.jar"
 JUNIT5_ENGINE_PATH="$JUNIT5_DIR/junit-jupiter-engine-5.11.3.jar"
@@ -17,6 +18,7 @@ JUNIT5_PARAMS_PATH="$JUNIT5_DIR/junit-jupiter-params-5.11.3.jar"
 
 # URLs for required downloads
 JUNIT4_URL="https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar"
+HAMCREST_URL="https://repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
 JUNIT5_API_URL="https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.11.3/junit-jupiter-api-5.11.3.jar"
 JUNIT5_ENGINE_URL="https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.11.3/junit-jupiter-engine-5.11.3.jar"
 JUNIT5_PARAMS_URL="https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-params/5.11.3/junit-jupiter-params-5.11.3.jar"
@@ -88,6 +90,7 @@ download_if_missing() {
 
 # Download files if they are missing
 download_if_missing "$JUNIT4_URL" "$JUNIT4_PATH"
+download_if_missing "$HAMCREST_URL" "$HAMCREST_PATH"
 download_if_missing "$JUNIT5_API_URL" "$JUNIT5_API_PATH"
 download_if_missing "$JUNIT5_ENGINE_URL" "$JUNIT5_ENGINE_PATH"
 download_if_missing "$JUNIT5_PARAMS_URL" "$JUNIT5_PARAMS_PATH"
