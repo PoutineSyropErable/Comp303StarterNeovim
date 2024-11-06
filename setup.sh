@@ -9,17 +9,7 @@ cd ~/Downloads || exit 1
 
 #This is for Linux, Using neovim to run the java code
 
-#First: Download Junit4
-wget https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
-
-#Then Junit5 (We dont need it, but hey...)
-wget https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.11.3/junit-jupiter-api-5.11.3.jar
-wget https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.11.3/junit-jupiter-engine-5.11.3.jar
-wget https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-params/5.11.3/junit-jupiter-params-5.11.3.jar
-
-#Then JavaFX: (I'm using Java17 cause It seems the Neovim packages are there)
-wget https://download2.gluonhq.com/openjfx/17.0.13/openjfx-17.0.13_linux-x64_bin-sdk.zip
-#(https://gluonhq.com/products/javafx/) (If you want to manually download it)
+#------------------------------------------------------find distro
 
 IS_ARCH=0
 IS_DEBIAN=0
@@ -46,6 +36,43 @@ elif [[ $IS_DEBIAN -eq 1 ]]; then
 else
 	echo "No specific commands for this distribution."
 fi
+
+#--------------------------------------------------------- CHECK IF YOU HAVEN'T ALREADY DOWNLOADED THE FILES, THEN DOWNLOAD
+
+# Define download URLs and target paths
+JUNIT4_URL="https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar"
+JUNIT5_API_URL="https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.11.3/junit-jupiter-api-5.11.3.jar"
+JUNIT5_ENGINE_URL="https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.11.3/junit-jupiter-engine-5.11.3.jar"
+JUNIT5_PARAMS_URL="https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-params/5.11.3/junit-jupiter-params-5.11.3.jar"
+JAVAFX_URL="https://download2.gluonhq.com/openjfx/17.0.13/openjfx-17.0.13_linux-x64_bin-sdk.zip"
+
+# Define local paths
+DOWNLOAD_DIR="/usr/lib/jvm"
+JUNIT4_PATH="$DOWNLOAD_DIR/junit-4.13.2.jar"
+JUNIT5_API_PATH="$DOWNLOAD_DIR/junit-jupiter-api-5.11.3.jar"
+JUNIT5_ENGINE_PATH="$DOWNLOAD_DIR/junit-jupiter-engine-5.11.3.jar"
+JUNIT5_PARAMS_PATH="$DOWNLOAD_DIR/junit-jupiter-params-5.11.3.jar"
+JAVAFX_ZIP_PATH="$DOWNLOAD_DIR/openjfx-17.0.13_linux-x64_bin-sdk.zip"
+
+# Function to download a file if it doesn't already exist
+download_if_missing() {
+	local url=$1
+	local target_path=$2
+	if [ ! -f "$target_path" ]; then
+		echo "Downloading $(basename "$target_path")..."
+		wget -q "$url" -O "$target_path"
+		echo "$(basename "$target_path") downloaded."
+	else
+		echo "$(basename "$target_path") already exists, skipping download."
+	fi
+}
+
+# Download files with checks
+download_if_missing "$JUNIT4_URL" "$JUNIT4_PATH"
+download_if_missing "$JUNIT5_API_URL" "$JUNIT5_API_PATH"
+download_if_missing "$JUNIT5_ENGINE_URL" "$JUNIT5_ENGINE_PATH"
+download_if_missing "$JUNIT5_PARAMS_URL" "$JUNIT5_PARAMS_PATH"
+download_if_missing "$JAVAFX_URL" "$JAVAFX_ZIP_PATH"
 
 unzip openjfx-17.0.13_linux-x64_bin-sdk.zip
 
