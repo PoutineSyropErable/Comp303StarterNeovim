@@ -59,3 +59,39 @@ sudo mv junit-4.13.2.jar /usr/lib/jvm/junit4
 sudo mv junit-jupiter-api-5.11.3.jar /usr/lib/jvm/junit5
 sudo mv junit-jupiter-engine-5.11.3.jar /usr/lib/jvm/junit5
 sudo mv junit-jupiter-params-5.11.3.jar /usr/lib/jvm/junit5
+
+#------------------------------Adding stuff to paths, not really needed but hey--------------------------------------------
+if ! grep -q "^#ADDING JAVA PATHS" ~/.bashrc; then
+	cat <<'EOF' >>~/.bashrc
+
+#ADDING JAVA PATHS
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+export PATH_TO_FX="/usr/lib/jvm/javafx-sdk-17.0.13/lib"
+export PATH="$JAVA_HOME/bin:$PATH"
+
+# Set paths for JUnit 5 and JUnit 4
+export JUNIT5_PATH="/usr/lib/jvm/junit5"
+export JUNIT4_PATH="/usr/lib/jvm/junit4"
+
+# Add JUnit paths to CLASSPATH // WE DO NOT USE JUNIT5 FOR NOW BUT IT IS THERE
+export CLASSPATH="$JUNIT5_PATH/junit-jupiter-api-5.11.3.jar:\
+$JUNIT5_PATH/junit-jupiter-engine-5.11.3.jar:\
+$JUNIT5_PATH/junit-jupiter-params-5.11.3.jar:\
+$JUNIT4_PATH/junit-4.13.2.jar"
+
+EOF
+fi
+
+#--------------------Adding the neovim command--------------------------------
+if ! grep -q '!bash ./build.sh' ~/.config/nvim/init.lua; then
+	cat <<'EOF' >>~/.config/nvim/init.lua
+
+vim.api.nvim_set_keymap(
+	"n",
+	"<F6>",
+	':lua vim.cmd("!bash ./build.sh " .. vim.fn.shellescape(vim.api.nvim_buf_get_name(0)))<CR>',
+	{ noremap = true, silent = true }
+)
+
+EOF
+fi
