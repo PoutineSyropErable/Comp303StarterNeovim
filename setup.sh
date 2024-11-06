@@ -67,7 +67,7 @@ else
 	echo "JavaFX SDK already exists, skipping unzip."
 fi
 
-# Add Java paths to ~/.bashrc if not already added
+#---------------------------------------------------- Add Java paths to ~/.bashrc if not already added
 if ! grep -q "^#ADDING JAVA PATHS" ~/.bashrc; then
 	echo "Adding Java paths to ~/.bashrc..."
 	cat <<'EOF' >>~/.bashrc
@@ -93,10 +93,16 @@ else
 	echo "Java paths already exist in ~/.bashrc."
 fi
 
-# Add Neovim build script mapping to init.lua if not already added
+#--------------------------------------------------------------
+mkdir -p ~/.config/nvim
+
+#------------------------------------------ Add Neovim build script mapping to init.lua if not already added
 if ! grep -q '!bash ./build.sh' ~/.config/nvim/init.lua; then
 	echo "Adding Neovim <F6> mapping for build script to init.lua..."
 	cat <<'EOF' >>~/.config/nvim/init.lua
+
+
+
 
 vim.api.nvim_set_keymap(
 	"n",
