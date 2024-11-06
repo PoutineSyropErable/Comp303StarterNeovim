@@ -1,58 +1,42 @@
 #!/bin/bash
 # COMP303 Starter Project Script
 
-# Exit on first failures
+# Exit on first failure
 set -e
 
-mkdir -p ~/Downloads
-cd ~/Downloads || exit 1
+# Define paths for downloads and installation directories
+DOWNLOAD_DIR="$HOME/Downloads"
+JVM_DIR="/usr/lib/jvm"
+JAVAFX_ZIP_PATH="$DOWNLOAD_DIR/openjfx-17.0.13_linux-x64_bin-sdk.zip"
+JAVAFX_DIR="$JVM_DIR/javafx-sdk-17.0.13"
+JUNIT4_PATH="$JVM_DIR/junit4/junit-4.13.2.jar"
+JUNIT5_DIR="$JVM_DIR/junit5"
+JUNIT5_API_PATH="$JUNIT5_DIR/junit-jupiter-api-5.11.3.jar"
+JUNIT5_ENGINE_PATH="$JUNIT5_DIR/junit-jupiter-engine-5.11.3.jar"
+JUNIT5_PARAMS_PATH="$JUNIT5_DIR/junit-jupiter-params-5.11.3.jar"
 
-#This is for Linux, Using neovim to run the java code
-
-#------------------------------------------------------find distro
-
-IS_ARCH=0
-IS_DEBIAN=0
-
-if grep -q "Arch" /etc/os-release; then
-	echo "This system is Arch-based."
-	IS_ARCH=1
-elif grep -q "Debian" /etc/os-release || grep -q "Ubuntu" /etc/os-release; then
-	echo "This system is Debian-based."
-	IS_DEBIAN=1
-else
-	echo "Unknown distribution. Exiting."
-	exit
-fi
-
-if [[ $IS_ARCH -eq 1 ]]; then
-	echo "Running Arch-specific command"
-	sudo pacman -S --needed unzip jdk17-openjdk wget
-
-elif [[ $IS_DEBIAN -eq 1 ]]; then
-	echo "Running Debian-specific command"
-	#No needed check, reinstalling shouldn't cause problem, but im not gonna create perfect code for debian lol
-	sudo apt install unzip openjdk-17-jdk wget
-else
-	echo "No specific commands for this distribution."
-fi
-
-#--------------------------------------------------------- CHECK IF YOU HAVEN'T ALREADY DOWNLOADED THE FILES, THEN DOWNLOAD
-
-# Define download URLs and target paths
+# URLs for required downloads
 JUNIT4_URL="https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar"
 JUNIT5_API_URL="https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.11.3/junit-jupiter-api-5.11.3.jar"
 JUNIT5_ENGINE_URL="https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.11.3/junit-jupiter-engine-5.11.3.jar"
 JUNIT5_PARAMS_URL="https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-params/5.11.3/junit-jupiter-params-5.11.3.jar"
 JAVAFX_URL="https://download2.gluonhq.com/openjfx/17.0.13/openjfx-17.0.13_linux-x64_bin-sdk.zip"
 
-# Define local paths
-DOWNLOAD_DIR="/usr/lib/jvm"
-JUNIT4_PATH="$DOWNLOAD_DIR/junit-4.13.2.jar"
-JUNIT5_API_PATH="$DOWNLOAD_DIR/junit-jupiter-api-5.11.3.jar"
-JUNIT5_ENGINE_PATH="$DOWNLOAD_DIR/junit-jupiter-engine-5.11.3.jar"
-JUNIT5_PARAMS_PATH="$DOWNLOAD_DIR/junit-jupiter-params-5.11.3.jar"
-JAVAFX_ZIP_PATH="$DOWNLOAD_DIR/openjfx-17.0.13_linux-x64_bin-sdk.zip"
+# Create necessary directories
+mkdir -p "$DOWNLOAD_DIR"
+mkdir -p "$JUNIT5_DIR" "$JVM_DIR/junit4"
+
+# Determine distribution and install required packages
+if grep -q "Arch" /etc/os-release; then
+	echo "This system is Arch-based."
+	sudo pacman -S --needed unzip jdk17-openjdk wget
+elif grep -q "Debian" /etc/os-release || grep -q "Ubuntu" /etc/os-release; then
+	echo "This system is Debian-based."
+	sudo apt update && sudo apt install -y unzip openjdk-17-jdk wget
+else
+	echo "Unknown distribution. Exiting."
+	exit 1
+fi
 
 # Function to download a file if it doesn't already exist
 download_if_missing() {
@@ -67,28 +51,25 @@ download_if_missing() {
 	fi
 }
 
-# Download files with checks
+# Download files if they are missing
 download_if_missing "$JUNIT4_URL" "$JUNIT4_PATH"
 download_if_missing "$JUNIT5_API_URL" "$JUNIT5_API_PATH"
 download_if_missing "$JUNIT5_ENGINE_URL" "$JUNIT5_ENGINE_PATH"
 download_if_missing "$JUNIT5_PARAMS_URL" "$JUNIT5_PARAMS_PATH"
 download_if_missing "$JAVAFX_URL" "$JAVAFX_ZIP_PATH"
 
-unzip openjfx-17.0.13_linux-x64_bin-sdk.zip
+# Unzip JavaFX SDK if not already unzipped
+if [ ! -d "$JAVAFX_DIR" ]; then
+	echo "Unzipping JavaFX SDK..."
+	unzip -q "$JAVAFX_ZIP_PATH" -d "$JVM_DIR"
+	echo "JavaFX SDK unzipped."
+else
+	echo "JavaFX SDK already exists, skipping unzip."
+fi
 
-sudo mkdir -p /usr/lib/jvm
-sudo mkdir -p /usr/lib/jvm/junit4
-sudo mkdir -p /usr/lib/jvm/junit5
-
-sudo mv javafx-sdk-17.0.13 /usr/lib/jvm
-sudo mv junit-4.13.2.jar /usr/lib/jvm/junit4
-
-sudo mv junit-jupiter-api-5.11.3.jar /usr/lib/jvm/junit5
-sudo mv junit-jupiter-engine-5.11.3.jar /usr/lib/jvm/junit5
-sudo mv junit-jupiter-params-5.11.3.jar /usr/lib/jvm/junit5
-
-#------------------------------Adding stuff to paths, not really needed but hey--------------------------------------------
+# Add Java paths to ~/.bashrc if not already added
 if ! grep -q "^#ADDING JAVA PATHS" ~/.bashrc; then
+	echo "Adding Java paths to ~/.bashrc..."
 	cat <<'EOF' >>~/.bashrc
 
 #ADDING JAVA PATHS
@@ -100,17 +81,21 @@ export PATH="$JAVA_HOME/bin:$PATH"
 export JUNIT5_PATH="/usr/lib/jvm/junit5"
 export JUNIT4_PATH="/usr/lib/jvm/junit4"
 
-# Add JUnit paths to CLASSPATH // WE DO NOT USE JUNIT5 FOR NOW BUT IT IS THERE
+# Add JUnit paths to CLASSPATH
 export CLASSPATH="$JUNIT5_PATH/junit-jupiter-api-5.11.3.jar:\
 $JUNIT5_PATH/junit-jupiter-engine-5.11.3.jar:\
 $JUNIT5_PATH/junit-jupiter-params-5.11.3.jar:\
 $JUNIT4_PATH/junit-4.13.2.jar"
 
 EOF
+	echo "Java paths added to ~/.bashrc."
+else
+	echo "Java paths already exist in ~/.bashrc."
 fi
 
-#--------------------Adding the neovim command--------------------------------
+# Add Neovim build script mapping to init.lua if not already added
 if ! grep -q '!bash ./build.sh' ~/.config/nvim/init.lua; then
+	echo "Adding Neovim <F6> mapping for build script to init.lua..."
 	cat <<'EOF' >>~/.config/nvim/init.lua
 
 vim.api.nvim_set_keymap(
@@ -121,4 +106,9 @@ vim.api.nvim_set_keymap(
 )
 
 EOF
+	echo "Neovim mapping added."
+else
+	echo "Neovim mapping already exists in init.lua."
 fi
+
+echo "Setup complete."
