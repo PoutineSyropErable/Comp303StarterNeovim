@@ -46,6 +46,7 @@ if grep -q "Arch" /etc/os-release; then
 elif grep -q "Debian" /etc/os-release || grep -q "Ubuntu" /etc/os-release; then
 	echo "This system is Debian-based."
 	debian_install
+else
 	echo "Unknown distribution. Exiting."
 	exit 1
 fi
@@ -107,6 +108,8 @@ fi
 
 #--------------------------------------------------------------
 mkdir -p ~/.config/nvim
+nvim_init="$HOME/.config/nvim/init.lua"
+[ ! -f "$nvim_init" ] && touch "$nvim_init"
 
 #------------------------------------------ Add Neovim build script mapping to init.lua if not already added
 if ! grep -q '!bash ./build.sh' ~/.config/nvim/init.lua; then
