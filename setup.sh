@@ -35,7 +35,6 @@ else
 	exit
 fi
 
-Example usage
 if [[ $IS_ARCH -eq 1 ]]; then
 	echo "Running Arch-specific command"
 	sudo pacman -S --needed unzip jdk17-openjdk wget
