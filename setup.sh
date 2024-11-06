@@ -26,6 +26,23 @@ JAVAFX_URL="https://download2.gluonhq.com/openjfx/17.0.13/openjfx-17.0.13_linux-
 mkdir -p "$DOWNLOAD_DIR"
 mkdir -p "$JUNIT5_DIR" "$JVM_DIR/junit4"
 
+#---------------fuck it lets make sure we have ~/.bashrc because debians sucks that much balls
+
+bashrc="$HOME/.bashrc"
+if [ ! -f "$bashrc" ]; then
+	touch "$bashrc"
+fi
+
+#-----making sure we even have nvim.lua because otherwise the code afterward somehow doesnt work
+
+mkdir -p "$HOME/.config/nvim"
+nvim_init="$HOME/.config/nvim/init.lua"
+if [ ! -f "$nvim_init" ]; then
+	touch "$nvim_init"
+	printf "\n\ntouching $nvim_init\n\n"
+	#Some fucking how, the prinf line is necessary i have no clue
+fi
+
 debian_install() {
 
 	# Check if packages are installed, install only if missing
@@ -80,13 +97,6 @@ else
 	echo "JavaFX SDK already exists, skipping unzip."
 fi
 
-#---------------fuck it lets make sure we have ~/.bashrc because debians sucks that much balls
-
-bashrc="$HOME/.bashrc"
-if [ ! -f "$bashrc" ]; then
-	touch "$bashrc"
-fi
-
 #---------------------------------------------------- Add Java paths to ~/.bashrc if not already added
 if ! grep -q "^#ADDING JAVA PATHS" ~/.bashrc; then
 	echo "Adding Java paths to ~/.bashrc..."
@@ -114,15 +124,6 @@ else
 fi
 
 #--------------------------------------------------------------
-#-----making sure we even have nvim.lua because otherwise the code afterward somehow doesnt work
-
-mkdir -p "$HOME/.config/nvim"
-nvim_init="$HOME/.config/nvim/init.lua"
-if [ ! -f "$nvim_init" ]; then
-	touch "$nvim_init"
-	printf "\n\ntouching $nvim_init\n\n"
-	#Some fucking how, the prinf line is necessary i have no clue
-fi
 
 #------------------------------------------ Add Neovim build script mapping to init.lua if not already added
 if ! grep -q '!bash ./build.sh' ~/.config/nvim/init.lua; then
