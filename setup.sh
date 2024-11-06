@@ -38,12 +38,12 @@ fi
 Example usage
 if [[ $IS_ARCH -eq 1 ]]; then
 	echo "Running Arch-specific command"
-	sudo pacman -S --needed unzip jdk17-openjdk
+	sudo pacman -S --needed unzip jdk17-openjdk wget
 
 elif [[ $IS_DEBIAN -eq 1 ]]; then
 	echo "Running Debian-specific command"
 	#No needed check, reinstalling shouldn't cause problem, but im not gonna create perfect code for debian lol
-	sudo apt install unzip openjdk-17-jdk
+	sudo apt install unzip openjdk-17-jdk wget
 else
 	echo "No specific commands for this distribution."
 fi
