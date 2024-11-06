@@ -102,53 +102,31 @@ else
 	echo "JavaFX SDK already exists, skipping unzip."
 fi
 
-#---------------------------------------------------- Add Java paths to ~/.bashrc if not already added
-if ! grep -q "^#ADDING JAVA PATHS" ~/.bashrc; then
-	echo "Adding Java paths to ~/.bashrc..."
-	cat <<'EOF' >>~/.bashrc
+#------------APPENDING TO THE FILES-------------
+# Function to append the init.lua from the repository to ~/.config/nvim/init.lua
+append_to_init_lua() {
+	REPO_INIT_LUA="~/your_repo/init.lua"
+	TARGET_INIT_LUA="~/.config/nvim/init.lua"
 
-#ADDING JAVA PATHS
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-export PATH_TO_FX="/usr/lib/jvm/javafx-sdk-17.0.13/lib"
-export PATH="$JAVA_HOME/bin:$PATH"
+	if [ -f "$REPO_INIT_LUA" ]; then
+		echo "Appending $REPO_INIT_LUA to $TARGET_INIT_LUA..."
+		cat "$REPO_INIT_LUA" >>"$TARGET_INIT_LUA"
+		echo "Content from init.lua in repo added to ~/.config/nvim/init.lua."
+	else
+		echo "init.lua in repository not found at $REPO_INIT_LUA."
+	fi
+}
 
-# Set paths for JUnit 5 and JUnit 4
-export JUNIT5_PATH="/usr/lib/jvm/junit5"
-export JUNIT4_PATH="/usr/lib/jvm/junit4"
+# Function to append the .bashrc from the repository to ~/.bashrc
+append_to_bashrc() {
+	REPO_BASHRC="~/your_repo/.bashrc"
+	TARGET_BASHRC="~/.bashrc"
 
-# Add JUnit paths to CLASSPATH
-export CLASSPATH="$JUNIT5_PATH/junit-jupiter-api-5.11.3.jar:\
-$JUNIT5_PATH/junit-jupiter-engine-5.11.3.jar:\
-$JUNIT5_PATH/junit-jupiter-params-5.11.3.jar:\
-$JUNIT4_PATH/junit-4.13.2.jar"
-
-EOF
-	echo "Java paths added to ~/.bashrc."
-else
-	echo "Java paths already exist in ~/.bashrc."
-fi
-
-#--------------------------------------------------------------
-
-#------------------------------------------ Add Neovim build script mapping to init.lua if not already added
-if ! grep -q '!bash ./build.sh' ~/.config/nvim/init.lua; then
-	echo "Adding Neovim <F6> mapping for build script to init.lua..."
-	cat <<'EOF' >>~/.config/nvim/init.lua
-
-
-
-
-vim.api.nvim_set_keymap(
-	"n",
-	"<F6>",
-	':lua vim.cmd("!bash ./build.sh " .. vim.fn.shellescape(vim.api.nvim_buf_get_name(0)))<CR>',
-	{ noremap = true, silent = true }
-)
-
-EOF
-	echo "Neovim mapping added."
-else
-	echo "Neovim mapping already exists in init.lua."
-fi
-
-echo "Setup complete."
+	if [ -f "$REPO_BASHRC" ]; then
+		echo "Appending $REPO_BASHRC to $TARGET_BASHRC..."
+		cat "$REPO_BASHRC" >>"$TARGET_BASHRC"
+		echo "Content from .bashrc in repo added to ~/.bashrc."
+	else
+		echo ".bashrc in repository not found at $REPO_BASHRC."
+	fi
+}
