@@ -130,3 +130,12 @@ append_to_bashrc() {
 		echo ".bashrc in repository not found at $REPO_BASHRC."
 	fi
 }
+
+# Conditionally call functions based on content of init.lua and .bashrc
+if ! grep -q '!bash ./build.sh' ~/.config/nvim/init.lua; then
+	append_to_init_lua
+fi
+
+if ! grep -q '#ADDING JAVA PATHS' ~/.bashrc; then
+	append_to_bashrc
+fi
