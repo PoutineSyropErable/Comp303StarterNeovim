@@ -6,11 +6,15 @@ set -e
 
 # Define paths for downloads and installation directories
 DOWNLOAD_DIR="$HOME/Downloads"
-JVM_DIR="/usr/lib/jvm"
 JAVAFX_ZIP_PATH="$DOWNLOAD_DIR/openjfx-17.0.13_linux-x64_bin-sdk.zip"
+
+JVM_DIR="/usr/lib/jvm"
 JAVAFX_DIR="$JVM_DIR/javafx-sdk-17.0.13"
-JUNIT4_PATH="$JVM_DIR/junit4/junit-4.13.2.jar"
+
+JUNIT4_DIR="$JVM_DIR/junit4"
+JUNIT4_PATH="$JUNIT4_DIR/junit-4.13.2.jar"
 HAMCREST_PATH="$JUNIT4_DIR/hamcrest-core-1.3.jar"
+
 JUNIT5_DIR="$JVM_DIR/junit5"
 JUNIT5_API_PATH="$JUNIT5_DIR/junit-jupiter-api-5.11.3.jar"
 JUNIT5_ENGINE_PATH="$JUNIT5_DIR/junit-jupiter-engine-5.11.3.jar"
@@ -79,7 +83,7 @@ fi
 download_if_missing() {
 	local url=$1
 	local target_path=$2
-	echo "($1) | ($2)"
+	# echo "($1) | ($2)"
 	if [ ! -f "$target_path" ]; then
 		echo "Downloading $(basename "$target_path")..."
 		wget -q --progress "$url" -O "$target_path"
