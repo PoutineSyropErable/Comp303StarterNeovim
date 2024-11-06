@@ -79,9 +79,10 @@ fi
 download_if_missing() {
 	local url=$1
 	local target_path=$2
+	echo "($1) | ($2)"
 	if [ ! -f "$target_path" ]; then
 		echo "Downloading $(basename "$target_path")..."
-		wget -q "$url" -O "$target_path"
+		wget -q --progress "$url" -O "$target_path"
 		echo "$(basename "$target_path") downloaded."
 	else
 		echo "$(basename "$target_path") already exists, skipping download."
