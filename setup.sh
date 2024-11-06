@@ -105,8 +105,8 @@ fi
 #------------APPENDING TO THE FILES-------------
 # Function to append the init.lua from the repository to ~/.config/nvim/init.lua
 append_to_init_lua() {
-	REPO_INIT_LUA="~/your_repo/init.lua"
-	TARGET_INIT_LUA="~/.config/nvim/init.lua"
+	REPO_INIT_LUA="./init.lua"
+	TARGET_INIT_LUA="$HOME/.config/nvim/init.lua"
 
 	if [ -f "$REPO_INIT_LUA" ]; then
 		echo "Appending $REPO_INIT_LUA to $TARGET_INIT_LUA..."
@@ -119,8 +119,8 @@ append_to_init_lua() {
 
 # Function to append the .bashrc from the repository to ~/.bashrc
 append_to_bashrc() {
-	REPO_BASHRC="~/your_repo/.bashrc"
-	TARGET_BASHRC="~/.bashrc"
+	REPO_BASHRC="./.bashrc"
+	TARGET_BASHRC="$HOME/.bashrc"
 
 	if [ -f "$REPO_BASHRC" ]; then
 		echo "Appending $REPO_BASHRC to $TARGET_BASHRC..."
