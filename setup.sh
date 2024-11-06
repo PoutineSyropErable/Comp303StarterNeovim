@@ -116,10 +116,12 @@ fi
 #--------------------------------------------------------------
 #-----making sure we even have nvim.lua because otherwise the code afterward somehow doesnt work
 
-mkdir -p ~/.config/nvim
+mkdir -p "$HOME/.config/nvim"
 nvim_init="$HOME/.config/nvim/init.lua"
 if [ ! -f "$nvim_init" ]; then
 	touch "$nvim_init"
+	printf "\n\ntouching $nvim_init\n\n"
+	#Some fucking how, the prinf line is necessary i have no clue
 fi
 
 #------------------------------------------ Add Neovim build script mapping to init.lua if not already added
