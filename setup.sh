@@ -41,6 +41,11 @@ if [ ! -f "$nvim_init" ]; then
 	touch "$nvim_init"
 	printf "\n\ntouching $nvim_init\n\n"
 	#Some fucking how, the prinf line is necessary i have no clue
+else
+	printf "\n\n WTf it exists????\n\n"
+	cat "$nvim_init"
+	printf "\n"
+
 fi
 
 debian_install() {
