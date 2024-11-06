@@ -80,6 +80,13 @@ else
 	echo "JavaFX SDK already exists, skipping unzip."
 fi
 
+#---------------fuck it lets make sure we have ~/.bashrc because debians sucks that much balls
+
+bashrc="$HOME/.bashrc"
+if [ ! -f "$bashrc" ]; then
+	touch "$bashrc"
+fi
+
 #---------------------------------------------------- Add Java paths to ~/.bashrc if not already added
 if ! grep -q "^#ADDING JAVA PATHS" ~/.bashrc; then
 	echo "Adding Java paths to ~/.bashrc..."
@@ -107,9 +114,13 @@ else
 fi
 
 #--------------------------------------------------------------
+#-----making sure we even have nvim.lua because otherwise the code afterward somehow doesnt work
+
 mkdir -p ~/.config/nvim
 nvim_init="$HOME/.config/nvim/init.lua"
-[ ! -f "$nvim_init" ] && touch "$nvim_init"
+if [ ! -f "$nvim_init" ]; then
+	touch "$nvim_init"
+fi
 
 #------------------------------------------ Add Neovim build script mapping to init.lua if not already added
 if ! grep -q '!bash ./build.sh' ~/.config/nvim/init.lua; then
