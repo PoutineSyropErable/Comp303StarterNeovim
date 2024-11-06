@@ -3,7 +3,9 @@
 #This is for Linux, Using neovim to run the java code
 If you are really lazy and you trust me:
 
-sudo ./setup.sh 
+sudo -E ./setup
+(If you want to have the init.lua append, you need the -E).
+Fucking hell it took way to long to debug that
 
 I have tested it on a clean arch vm, it works. Don't know about debian i forgot my password of my ubuntu vm and im not creating a new one. 
 Already 1am
