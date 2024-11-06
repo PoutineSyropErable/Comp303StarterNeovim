@@ -28,7 +28,9 @@ public class Song
 	{
 
 		Song mySong = new Song();
+		System.out.println("\nIT works!\n");
 		System.out.println(mySong);
+		System.out.println("\n");
 
 	}
 }
