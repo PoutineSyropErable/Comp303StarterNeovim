@@ -26,14 +26,26 @@ JAVAFX_URL="https://download2.gluonhq.com/openjfx/17.0.13/openjfx-17.0.13_linux-
 mkdir -p "$DOWNLOAD_DIR"
 mkdir -p "$JUNIT5_DIR" "$JVM_DIR/junit4"
 
+debian_install() {
+
+	# Check if packages are installed, install only if missing
+	for package in unzip openjdk-17-jdk wget; do
+		if ! dpkg-query -W -f='${Status}' "$package" 2>/dev/null | grep -q "install ok installed"; then
+			echo "$package is not installed. Installing..."
+			sudo apt install -y "$package"
+		else
+			echo "$package is already installed. Skipping..."
+		fi
+	done
+}
+
 # Determine distribution and install required packages
 if grep -q "Arch" /etc/os-release; then
 	echo "This system is Arch-based."
 	sudo pacman -S --needed unzip jdk17-openjdk wget
 elif grep -q "Debian" /etc/os-release || grep -q "Ubuntu" /etc/os-release; then
 	echo "This system is Debian-based."
-	sudo apt update && sudo apt install -y unzip openjdk-17-jdk wget
-else
+	debian_install
 	echo "Unknown distribution. Exiting."
 	exit 1
 fi
