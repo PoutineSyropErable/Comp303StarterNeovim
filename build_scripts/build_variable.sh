@@ -7,11 +7,15 @@ export PATH_TO_FX="/usr/lib/jvm/javafx-sdk-17.0.13/lib"
 export PATH="$JAVA_HOME/bin:$PATH"
 
 # Set paths for JUnit 5 and JUnit 4
-export JUNIT5_PATH="/usr/lib/jvm/junit5"
 export JUNIT4_PATH="/usr/lib/jvm/junit4"
+export JUNIT4_JAR="$JUNIT4_PATH/junit-4.13.2.jar"
+export HAMCREST_JAR="$JUNIT4_PATH/hamcrest-core-1.3.jar"
+export CLASSPATH="$JUNIT4_JAR:$HAMCREST_JAR"
+
+export JUNIT5_PATH="/usr/lib/jvm/junit5"
 
 # Add JUnit paths to CLASSPATH // WE DO NOT USE JUNIT5 FOR NOW BUT IT IS THERE
-export CLASSPATH="$JUNIT5_PATH/junit-jupiter-api-5.11.3.jar:\
+export CLASSPATH_5="$JUNIT5_PATH/junit-jupiter-api-5.11.3.jar:\
 $JUNIT5_PATH/junit-jupiter-engine-5.11.3.jar:\
 $JUNIT5_PATH/junit-jupiter-params-5.11.3.jar:\
 $JUNIT4_PATH/junit-4.13.2.jar"
@@ -103,10 +107,10 @@ javac --module-path "$PATH_TO_FX:$JUNIT4_PATH" \
 	-d "$OUTPUT_DIR" $ALL_JAVA_FILES
 
 #-----------------------------------EXECUTING THE FILE--------------------------------
-
+printf -- "\nMAIN_MODULE:($MAIN_MODULE) \n\n"
 printf -- "\n\n-------------------------START OF PROGRAM-----------------------------\n\n"
 
 java --module-path "$PATH_TO_FX:$OUTPUT_DIR" \
 	--add-modules "javafx.base,javafx.controls,javafx.graphics" \
-	-cp "$JUNIT4_PATH" \
+	-cp "$CLASSPATH" \
 	-m "$MAIN_MODULE"

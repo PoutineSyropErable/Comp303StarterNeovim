@@ -30,4 +30,4 @@ javac --module-path "$PATH_TO_FX:$JUNIT4_PATH" \
 	-d out $(find src -name "*.java")
 
 # Run the JUnit test
-java -cp "out:$JUNIT4_JAR:$HAMCREST_JAR" org.junit.runner.JUnitCore comp303.demo.TestAlternatingLabelProvider
+java -cp "out:$CLASSPATH" org.junit.runner.JUnitCore comp303.demo.TestAlternatingLabelProvider
